@@ -44,7 +44,7 @@
    * Discrepancies and suspicious findings are logged to the kernel log (`dmesg`) or exported to user-space for further analysis.
    * Example findings include hidden processes, unauthorized kernel modules, and tampered modules.
 
----
+
 
 
 ---
