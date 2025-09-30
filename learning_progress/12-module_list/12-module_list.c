@@ -40,7 +40,7 @@ static int __init mymodule_init(void)
 
 static void __exit mymodule_exit(void)
 {
-    remove_proc_entry("trusted_modules", NULL);
+    remove_proc_entry("loaded_mods", NULL);
     pr_info("MODULE LISTER LOADED\n");
 }
 
