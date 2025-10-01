@@ -47,27 +47,6 @@ This Linux kernel module is designed to traverse the kernel’s process list and
 
 ---
 
-## Installation
-
-1. **Build the module**: Use the standard kernel build system (`Makefile`) to compile the module.
-2. **Insert the module**:
-
-   ```bash
-   sudo insmod open_ports.ko
-   ```
-3. **Verify**: The module will create a `/proc/open_ports` entry. You can read it using:
-
-   ```bash
-   cat /proc/open_ports
-   ```
-4. **Remove the module**:
-
-   ```bash
-   sudo rmmod open_ports
-   ```
-
----
-
 ## Usage
 
 After inserting the module, you can use the following command to view all active network sockets for all processes:
