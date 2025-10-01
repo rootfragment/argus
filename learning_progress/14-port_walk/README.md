@@ -13,7 +13,6 @@ This Linux kernel module is designed to traverse the kernel’s process list and
 * Supports both IPv4 and IPv6 sockets.
 * Provides source and destination port information for each socket.
 * Exposes results through a `/proc` entry for easy userspace reading.
-
 ---
 
 ## How the Module Works
