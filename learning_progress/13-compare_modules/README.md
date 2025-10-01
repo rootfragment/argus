@@ -7,11 +7,6 @@
 * **Kernel and User Space Comparison:**
   Walks through the kernel's process and module lists and compares them to the user-space equivalents to detect hidden entities.
 
-* **Process & Socket Inspection:**
-  Enumerates running processes, open sockets, and network connections at the kernel level.
-
-* **Module Hashing for Integrity:**
-  Supports hashing loaded kernel modules to detect unauthorized modifications.
 
 * **Logging & Reporting:**
   Logs detected discrepancies for offline analysis.
@@ -25,19 +20,17 @@
    * The framework loads as a Linux kernel module.
    * It traverses kernel data structures (`task_struct` for processes, module lists for loaded modules).
    * Collects detailed metadata about running processes and loaded kernel modules.
-   * Optionally, computes hashes for modules to detect tampering.
+ 
 
 2. **User-Space View:**
 
-   * Reads process information via `/proc` filesystem (e.g., `/proc/<pid>`).
    * Reads module information from `/proc/modules` or equivalent user-space interfaces.
-   * Builds sets of process IDs and module names for comparison.
+   * Builds sets of module names for comparison.
 
 3. **Dual-View Comparison:**
 
    * Converts kernel-space and user-space data into comparable sets.
    * Identifies missing processes or modules in user-space that exist in kernel-space (a hallmark of rootkits).
-   * Can optionally filter or inspect processes with open sockets to detect suspicious network activity.
 
 4. **Reporting:**
 
