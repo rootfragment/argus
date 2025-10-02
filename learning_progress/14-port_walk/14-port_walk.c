@@ -53,7 +53,7 @@ static int show_sockets(struct seq_file *m , void *v)
                 continue;
 
             inet = inet_sk(sk);
-            seq_printf(m,"[kports] pid=%d comm=%s source port=%u destination port=%u\n",
+            seq_printf(m,"pid=%d comm=%s source port=%u destination port=%u\n",
                    task->pid, task->comm,
                    ntohs(inet->inet_sport), ntohs(inet->inet_dport));
         }
