@@ -57,8 +57,8 @@ cat /proc/open_ports
 Example output:
 
 ```
-[kports] pid=1234 comm=nginx source port=8080 destination port=443
-[kports] pid=5678 comm=ssh source port=22 destination port=51234
+pid=1234 comm=nginx source port=8080 destination port=443
+pid=5678 comm=ssh source port=22 destination port=51234
 ```
 
 * `pid` – Process ID
