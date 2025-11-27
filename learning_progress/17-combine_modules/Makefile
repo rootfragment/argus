@@ -1,6 +1,6 @@
-obj-m += hydrogen.o
+obj-m += single_file.o
 
-hydrogen-objs := core.o part_1.o part_2.o part_3.o
+single_file-objs := core.o part_1.o part_2.o part_3.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
