@@ -1,4 +1,4 @@
-# Overview of the eBPF Program Execution Counter
+# Overview 
 
 This program uses eBPF (extended Berkeley Packet Filter) and the BCC (BPF Compiler Collection) framework to create a system-wide monitor for program executions. It tracks every time a new program is launched via the `execve` system call and maintains a count of how many times each user (identified by their UID) has executed a program. The collected data is stored in an eBPF map, and the Python script periodically reads this map to print a live report of execution counts per user.
 
