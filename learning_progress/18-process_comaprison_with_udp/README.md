@@ -1,5 +1,5 @@
 # Overview
-Compares process from user-space and kernel-space checks for anomalies from both the lists and then sends a UDP alert, the destination of the program can be set by manipulating the config fields. Alerts are intended to be sent to a n/w admin to alert the detection of a suspicious process.
+Compares process from user-space and kernel-space checks for anomalies from both the lists and then sends a UDP alert, the destination of the alert can be set by manipulating the config fields. Alerts are intended to be sent to a n/w admin to alert the detection of a suspicious process.
 
 ## How It Works
 
