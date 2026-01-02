@@ -1,6 +1,6 @@
 # Kernel Module Controller via /proc Filesystem
 
-The module creates an interface in the `/proc` filesystem which is aimed at giving an insight to the working of the proc filesystem and how a module which is running can be manipulated from userspace by writing a specific command into the proc file 
+The module creates an interface in the `/proc` filesystem which is aimed at giving an insight in the working of the proc filesystem and how a module which is running can be manipulated from userspace by writing a specific command into the proc file 
 
 ## How It Works
 
