@@ -42,14 +42,14 @@ Navigate to the directory containing the source code and a corresponding `Makefi
 make
 ```
 
-This will produce a kernel object file named `control_module.ko`.
+This will produce a kernel object file named `program.ko`.
 
 ### 2. Loading the Module
 
 Load the compiled module into the kernel using `insmod`. This requires root privileges.
 
 ```sh
-sudo insmod control_module.ko
+sudo insmod program.ko
 ```
 
 After loading, a new file will be available at `/proc/proc_demo`.
@@ -81,5 +81,5 @@ After loading, a new file will be available at `/proc/proc_demo`.
 When you are finished, unload the module using `rmmod`. This will automatically remove the `/proc/proc_demo` file.
 
 ```sh
-sudo rmmod control_module
+sudo rmmod program
 ```
