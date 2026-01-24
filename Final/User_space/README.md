@@ -11,6 +11,7 @@ This is the userspace command-line interface (CLI) for the Argus Linux Rootkit D
 - **Full Scan:** Runs all three scans sequentially for a comprehensive system check.
 - **Threat Analysis:** Provides a high-level summary of the findings, suggesting the type of potential rootkit (e.g., Process-Hiding, LKM, Advanced Kernel Rootkit).
 - **Configurable UDP Alerts:** Can be configured to automatically send scan results to one or more remote UDP listeners for centralized monitoring.
+- **Daemon mode:** Runs argus in the background and scans are repeated in user specified intervals.
 
 ## How It Works
 
@@ -65,3 +66,44 @@ To receive alerts, edit the `config.json` file and add your listener details.
 - **`enabled`**: Set to `true` to send alerts to this listener, `false` to disable.
 
 You can add multiple listener objects to the `listener_list` array to send alerts to several destinations.
+
+## What is Daemon Mode?
+
+Daemon mode is designed for continuous, autonomous monitoring of your system. Instead of running scans manually, you can launch Argus as a background process (a "daemon") that will periodically perform a full system scan without any further user interaction.
+
+When a potential threat is detected, the daemon will automatically send a UDP alert to all configured listeners.
+
+This "set it and forget it" approach ensures your system is consistently monitored for suspicious activity.
+
+## How It Works
+
+When you start the tool with the `--daemon` flag, the script performs several actions to become a true daemon process:
+
+1.  **Forking:** The script "forks" itself into a child process and a parent process. The parent process exits immediately, returning you to your command prompt.
+2.  **Detaching:** The child process detaches from the terminal, ensuring it won't be terminated if you close your shell session.
+3.  **PID File:** It creates a PID (Process ID) file at `/tmp/argus_daemon.pid`. This file stores the daemon's process ID and is used to prevent multiple daemons from running simultaneously and to stop the correct process.
+4.  **Scanning Loop:** The daemon enters an infinite loop where it:
+    *   Performs a full scan (processes, modules, and ports).
+    *   Pauses for the user-defined interval.
+    *   Repeats the cycle.
+
+### Starting the Daemon
+
+To start Argus in daemon mode, use the `-t` or `--daemon` flag, followed by the scan interval in seconds.
+
+**Example:** To run a full scan every 5 minutes (300 seconds):
+```bash
+sudo python3 argus_cli_daemon.py --daemon 300
+```
+You will see a confirmation message, and the daemon will begin running in the background:
+```
+[*] Starting Argus in daemon mode with a 300 second interval.
+```
+
+### Stopping the Daemon
+
+To stop a running daemon, use the `--stop` flag:
+```bash
+sudo python3 argus_cli_daemon.py --stop
+```
+This command reads the PID from `/tmp/argus_daemon.pid` and sends a termination signal to the correct process.
