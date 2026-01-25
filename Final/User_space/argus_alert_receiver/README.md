@@ -4,7 +4,7 @@ This document provides an overview of the `argus_alert_receiver.py` script, a co
 
 ## What is the Receiver?
 
-The `argus_alert_receiver.py` script is a lightweight, standalone UDP server designed to listen for and log alert messages sent by the Argus client (`argus_cli.py`) or the Argus daemon (`argus_cli.py`).
+The `argus_alert_receiver.py` script is a lightweight, standalone UDP server designed to listen for and log alert messages sent by the Argus client (`argus_cli.py`).
 
 Its primary purpose is to provide a centralized collection point for security alerts. You can run this receiver on a dedicated security monitoring machine, and configure all your monitored systems to send their Argus alerts to it.
 
