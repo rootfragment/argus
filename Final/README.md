@@ -127,8 +127,6 @@ All commands require `sudo` or root privileges to load/unload kernel modules and
 ├── modules.c / .h      # Logic for iterating kernel modules
 ├── process.c / .h      # Logic for iterating processes
 ├── socket.c / .h       # Logic for iterating network sockets
-├── argus_cli.py       # Python user-space client and scanner
-└── config.json         # Configuration for UDP alert listeners
 ```
 
 ## Dependencies and Installation
