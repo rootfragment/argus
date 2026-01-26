@@ -1,109 +1,88 @@
-# Argus - Userspace Detection Client
+# Argus User-Space Components
 
-This is the userspace command-line interface (CLI) for the Argus Linux Rootkit Detection Framework. This Python script interacts with the Argus kernel module to scan for and identify discrepancies between the kernel's view of the system and the userspace's view, which can be a strong indication of rootkit activity.
+This directory contains the user-space components for the Argus Linux Rootkit Detection Framework. These Python scripts are responsible for interacting with the Argus kernel modules, performing scans, analyzing results, and handling alerting.
 
-## Features
+## Components
 
-- **Interactive Menu:** Provides a simple, menu-driven interface to run different security scans.
-- **Process Scan:** Compares the process list from the Argus kernel module (`/proc/rk_ps`) with the output of the standard `ps` command to detect hidden processes.
-- **Module Scan:** Compares the kernel module list from `/proc/rk_mods` with the list from `/proc/modules` to detect hidden LKMs.
-- **Port Scan:** Compares the list of listening network ports from `/proc/rk_sockets` with the output of the `ss` command to find hidden backdoors.
-- **Full Scan:** Runs all three scans sequentially for a comprehensive system check.
-- **Threat Analysis:** Provides a high-level summary of the findings, suggesting the type of potential rootkit (e.g., Process-Hiding, LKM, Advanced Kernel Rootkit).
-- **Configurable UDP Alerts:** Can be configured to automatically send scan results to one or more remote UDP listeners for centralized monitoring.
-- **Daemon mode:** Runs argus in the background and scans are repeated in user specified intervals.
+1.  **`argus_cli.py`**: The main command-line interface and scanning engine.
+2.  **`argus_alert_receiver.py`**: A dedicated UDP server for receiving and logging alerts.
 
-## How It Works
+---
 
-The client operates on a simple principle: **trust the kernel**. It reads the "ground truth" data from the `/proc/rk_*` files created by the Argus kernel module. It then gathers the equivalent data from standard userspace utilities (`ps`, `ss`, etc.). By finding the difference between these two sets, it can pinpoint resources that are being actively hidden from the userspace, a common technique used by rootkits.
+## `argus_cli.py` - The Scanning Engine
 
-For example, if a process PID appears in `/proc/rk_ps` but not in the output of `ps -e`, it is flagged as a "Hidden Process."
+This is the primary tool for interacting with the Argus framework. It reads data exposed by the kernel modules and compares it against the output of standard user-space utilities to find discrepancies that could indicate rootkit activity.
 
-## Prerequisites
+### Features
 
-1.  **Argus Kernel Module:** The `argus_lkm.ko` module must be loaded into the kernel. This script is entirely dependent on the `/proc/rk_*` files created by the module.
-2.  **Root Privileges:** The script should be run as root (`sudo`) to ensure it has the necessary permissions to read proc files and run system commands accurately.
-3.  **Standard Linux Utilities:** The script relies on `ps` and `ss` being installed and available in the system's PATH.
+*   **Multiple Scan Types:**
+    *   **Process Scan:** Compares the process list from the kernel's point of view with the output of `ps` to find hidden processes.
+    *   **Module Scan:** Compares the loaded kernel modules from the kernel's list with the output of `lsmod` to find hidden modules (a strong indicator of a Loadable Kernel Module rootkit).
+    *   **Port Scan:** Compares listening network ports seen by the kernel with the output of `ss` to find hidden backdoors.
+*   **Interactive Menu:** A user-friendly menu for running scans manually.
+*   **Daemon Mode:** Can run as a background daemon to perform continuous, automated scans at a regular interval (`-t <seconds>`). When anomalies are found in this mode, it automatically sends a UDP alert.
+*   **UDP Alerting:** Can send alerts over UDP to a configured receiver. This is handled automatically in daemon mode and can be toggled on or off in interactive mode.
+*   **Configuration:** Uses a `config.json` file to manage the list of alert receivers.
 
-## Usage
+### Usage
 
-1.  Ensure the Argus kernel module is loaded (`sudo insmod argus_lkm.ko`).
-2.  Run the client with root privileges:
-    ```bash
-    sudo ./argus_cli.py
-    ```
-3.  Use the interactive menu to select a scan:
-    - `[1]` Process Scan
-    - `[2]` Module Scan
-    - `[3]` Port Scan
-    - `[4]` Full Scan
-    - `[5]` Toggle UDP alerts ON/OFF for the current session.
-    - `[99]` Exit
+**Prerequisites:** The Argus kernel modules must be loaded for this script to function correctly. Requires root privileges.
 
-## Configuration
-
-The script uses a `config.json` file for configuration. If this file is not found, a default one will be created automatically.
-
-### UDP Alerts
-
-To receive alerts, edit the `config.json` file and add your listener details.
-
-**Default `config.json`:**
-```json
-{
-    "listener_list": [
-        {
-            "ip": "127.0.0.1",
-            "port": 12345,
-            "enabled": true
-        }
-    ]
-}
-```
-
-- **`ip`**: The IP address of the machine listening for UDP packets.
-- **`port`**: The port on the listening machine.
-- **`enabled`**: Set to `true` to send alerts to this listener, `false` to disable.
-
-You can add multiple listener objects to the `listener_list` array to send alerts to several destinations.
-
-## What is Daemon Mode?
-
-Daemon mode is designed for continuous, autonomous monitoring of your system. Instead of running scans manually, you can launch Argus as a background process (a "daemon") that will periodically perform a full system scan without any further user interaction.
-
-When a potential threat is detected, the daemon will automatically send a UDP alert to all configured listeners.
-
-This "set it and forget it" approach ensures your system is consistently monitored for suspicious activity.
-
-## How It Works
-
-When you start the tool with the `--daemon` flag, the script performs several actions to become a true daemon process:
-
-1.  **Forking:** The script "forks" itself into a child process and a parent process. The parent process exits immediately, returning you to your command prompt.
-2.  **Detaching:** The child process detaches from the terminal, ensuring it won't be terminated if you close your shell session.
-3.  **PID File:** It creates a PID (Process ID) file at `/tmp/argus_daemon.pid`. This file stores the daemon's process ID and is used to prevent multiple daemons from running simultaneously and to stop the correct process.
-4.  **Scanning Loop:** The daemon enters an infinite loop where it:
-    *   Performs a full scan (processes, modules, and ports).
-    *   Pauses for the user-defined interval.
-    *   Repeats the cycle.
-
-### Starting the Daemon
-
-To start Argus in daemon mode, use the `-t` or `--daemon` flag, followed by the scan interval in seconds.
-
-**Example:** To run a full scan every 5 minutes (300 seconds):
+**Interactive Mode:**
 ```bash
-sudo python3 argus_cli_daemon.py --daemon 300
+sudo python3 argus_cli.py
 ```
-You will see a confirmation message, and the daemon will begin running in the background:
-```
-[*] Starting Argus in daemon mode with a 300 second interval.
-```
+This will display a menu where you can choose which scan to run.
 
-### Stopping the Daemon
-
-To stop a running daemon, use the `--stop` flag:
+**Daemon Mode:**
+To run a full scan every 60 seconds and send alerts on findings:
 ```bash
-sudo python3 argus_cli_daemon.py --stop
+sudo python3 argus_cli.py -t 60
 ```
-This command reads the PID from `/tmp/argus_daemon.pid` and sends a termination signal to the correct process.
+
+**Stopping the Daemon:**
+```bash
+sudo python3 argus_cli.py --stop
+```
+
+---
+
+## `argus_alert_receiver.py` - The Alert Receiver
+
+This script is a lightweight UDP server designed to listen for and log alert messages sent by `argus_cli.py`. It acts as a centralized collection point for security alerts from one or more monitored systems.
+
+### Features
+
+*   **Centralized Logging:** Collects alerts from any number of Argus clients into a single `argus_alerts.log` file.
+*   **Rate Limiting:** Prevents log flooding by limiting the number of alerts it will process from a single IP address (by default, 1 alert per 10 seconds).
+*   **Daemon Mode:** Can run as a persistent background service using the `--daemon` flag.
+*   **Remote Stop:** Can be cleanly stopped from the command line using the `--stop` flag.
+
+### Usage
+
+**Foreground Mode:**
+```bash
+python3 argus_alert_receiver.py
+```
+The receiver will run in the current terminal. Press `Ctrl+C` to stop it.
+
+**Daemon Mode:**
+To run the receiver as a background service:
+```bash
+python3 argus_alert_receiver.py --daemon
+```
+
+**Stopping the Daemon:**
+```bash
+python3 argus_alert_receiver.py --stop
+```
+
+---
+
+## How They Work Together
+
+1.  The **`argus_alert_receiver.py`** is started (ideally as a daemon) on a machine designated for monitoring.
+2.  On the systems being monitored, the **`argus_cli.py`** script is run (either in interactive or daemon mode).
+3.  The `config.json` file for `argus_cli.py` is configured with the IP address and port of the machine running the `argus_alert_receiver.py`.
+4.  When `argus_cli.py` performs a scan and finds a potential threat, it sends a UDP packet containing the details of the finding to the receiver.
+5.  The `argus_alert_receiver.py` receives this packet and logs the alert to `argus_alerts.log`, timestamped and with the source IP of the reporting client.
