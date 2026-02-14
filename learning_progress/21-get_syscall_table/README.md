@@ -1,8 +1,8 @@
-# Linux Kernel Syscall Table Address finder
+# Syscall Table Address finder
 
 ## Description
 
-This project contains a Linux Kernel Module (LKM) that demonstrates how to find the address of the system call table in the Linux kernel. The module, `get_syscall_table.c`, retrieves the memory address of the `sys_call_table`.
+This lkm is designed to retrive the address of the syscall table from the memory (RAM), here kprobes are assigned to first find the `kallsyms_lookup_name` and then it is used to find the adress of other required systemcalls.
 This technique is often used by rootkits and other malicious software to intercept and manipulate system calls, allowing them to hide their presence and control the system. This code is intended for educational purposes only and should not be used on production systems.
 
 ## How it Works
