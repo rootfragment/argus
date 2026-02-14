@@ -1,12 +1,5 @@
 # Multi-File Kernel Module Demo 
 
-This README explains **how a single Linux kernel module (`.ko`) is built
-from multiple source files**, how they communicate, and how the project
-structure works.
-All source code has been intentionally removed as requested.
-
-------------------------------------------------------------------------
-
 ##  Project Structure
 
     /demo
