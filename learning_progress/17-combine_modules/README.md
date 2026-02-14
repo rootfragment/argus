@@ -1,8 +1,8 @@
-# Multi-File Kernel Module Demo --- 
+# Multi-File Kernel Module Demo 
 
 This README explains **how a single Linux kernel module (`.ko`) is built
 from multiple source files**, how they communicate, and how the project
-structure works.\
+structure works.
 All source code has been intentionally removed as requested.
 
 ------------------------------------------------------------------------
@@ -32,12 +32,12 @@ This project demonstrates how:
 
 ------------------------------------------------------------------------
 
-##  How the Components Work (Without Code)
+##  How the Components Work 
 
 ###  demo.h --- Header File
 
 The header file contains declarations of functions that other `.c` files
-implement.\
+implement.
 It acts as a **shared interface** so each file knows what functions
 exist.
 
@@ -60,8 +60,7 @@ This file contains the kernel module's:
 
 This README explains **how a single Linux kernel module (`.ko`) is built
 from multiple source files**, how they communicate, and how the project
-structure works.\
-All source code has been intentionally removed as requested.
+structure works.
 
 ------------------------------------------------------------------------
 
@@ -95,12 +94,11 @@ This project demonstrates how:
 ###  demo.h --- Header File
 
 The header file contains declarations of functions that other `.c` files
-implement.\
+implement.
 It acts as a **shared interface** so each file knows what functions
 exist.
 
-###  part_1.c, part_2.c, part_3.c --- Separated Logic
-
+###  part_1.c, part_2.c, part_3.c 
 Each file in this group:
 
 -   includes the shared header
@@ -117,7 +115,7 @@ This file contains the kernel module's:
 -   **initialization function** (runs on module load)
 -   **exit function** (runs on module unload)
 
-It calls the functions implemented in all part files.\
+It calls the functions implemented in all part files.
 This demonstrates how split source files still form a single final
 module.
 
@@ -178,16 +176,16 @@ kernel module**.
 
 This demo illustrates:
 
--   modular file structure\
--   clean separation of functionality\
--   unified build output\
+-   modular file structure
+-   clean separation of functionality
+-   unified build output
 -   scalable design for larger kernel frameworks
 
 This structure is ideal for real-world kernel projects such as
 monitoring frameworks, security tools, or debugging modules.
 -   **exit function** (runs on module unload)
 
-It calls the functions implemented in all part files.\
+It calls the functions implemented in all part files.
 This demonstrates how split source files still form a single final
 module.
 
@@ -243,15 +241,3 @@ Even though there are multiple C source files, the final result is **one
 kernel module**.
 
 ------------------------------------------------------------------------
-
-##  Summary
-
-This demo illustrates:
-
--   modular file structure\
--   clean separation of functionality\
--   unified build output\
--   scalable design for larger kernel frameworks
-
-This structure is ideal for real-world kernel projects such as
-monitoring frameworks, security tools, or debugging modules.
