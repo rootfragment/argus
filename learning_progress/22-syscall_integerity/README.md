@@ -47,7 +47,7 @@ This detector effectively catches such modifications. When Diamorphine overwrite
     ```
     If a syscall is tampered with while the module is running, a message like this will appear:
     ```
-    [  +5.000123] DKOM: Syscall 61 tampered! Original: ffffffff814a6b90, New: ffffffffc0a3e0c0
+    [  +5.000123] Syscall integerity checker: Syscall 61 tampered! Original: ffffffff814a6b90, New: ffffffffc0a3e0c0
     ```
 
 4.  **Unload the module:**
