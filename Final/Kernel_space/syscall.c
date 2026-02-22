@@ -2,6 +2,7 @@
 #include <linux/seq_file.h>
 #include <linux/unistd.h>
 #include <linux/kallsyms.h>
+#include "syscall.h"
 
 extern unsigned long *sys_call_table;
 extern unsigned long *golden_sys_call_table;
