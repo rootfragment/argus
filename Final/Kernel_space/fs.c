@@ -44,7 +44,7 @@ static int argus_filldir(struct dir_context *ctx,
         return 0;
 
 
-    fullpath = kasprintf(GFP_KERNEL, "%s/%*s", 
+    fullpath = kasprintf(GFP_KERNEL, "%s/%.*s",
                          actx->base_path, namelen, name);
     if (!fullpath)
         return -ENOMEM;
