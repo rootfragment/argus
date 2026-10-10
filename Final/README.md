@@ -230,6 +230,7 @@ All commands require `sudo` or root privileges to load/unload kernel modules and
 *   **Predictable Footprint**: The use of well-known `/proc` file names (`rk_ps`, `rk_mods`, etc.) creates a predictable footprint that could be detected and targeted by advanced malware.
 *   **Snapshot-in-Time**: The scans are not continuous. A sophisticated rootkit could potentially detect the scan and temporarily hide its activities, leading to a false negative.
 *   **Requires Root Privileges**: Like all tools of this nature, it must be run as root. This carries inherent risk, and a compromised Argus tool could become a security threat itself.
+*   **Process scan vuln**: The `THIS_MODULE` list is the list that `/proc/modules` reads as well this means that dual view comp dosent really work here. Will have to come up with some more robust.
   
 
 ### Explored Research: Runtime Integrity Verification
